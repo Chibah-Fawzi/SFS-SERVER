@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 import { db } from "./config/db";
 const router = require("express").Router();
 
+const spotifyRoute = require("./app/spotify/route");
+
 const cors = require("cors");
 var cookieParser = require("cookie-parser");
 
@@ -23,6 +25,8 @@ app
     res.send("Express + TypeScript Server");
   })
   .use("/", router);
+
+spotifyRoute.init(router);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
