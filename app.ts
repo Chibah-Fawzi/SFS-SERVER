@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import { db } from "./config/db";
 const router = require("express").Router();
 
+const authRoute = require("./app/auth/route");
 const spotifyRoute = require("./app/spotify/route");
 
 const cors = require("cors");
@@ -26,6 +27,7 @@ app
   })
   .use("/", router);
 
+authRoute.init(router);
 spotifyRoute.init(router);
 
 app.listen(port, () => {
