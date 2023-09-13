@@ -1,15 +1,19 @@
 import { Express, Request, Response } from "express";
+const dotenv = require("dotenv");
 
 import bodyParser from "body-parser";
-
+import { db } from "./config/db";
 const router = require("express").Router();
 
 const cors = require("cors");
 var cookieParser = require("cookie-parser");
 
+dotenv.config();
+
 // eslint-disable-line import/no-extraneous-dependencies
 export const app: Express = require("express")();
 const port = process.env.PORT;
+db.connect();
 
 app.use(bodyParser.json());
 app.use(cors()).use(cookieParser());

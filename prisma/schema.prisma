@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  full_name      String
+  email          String          @unique
+  password       String
+  login_activity LoginActivity[]
+  stripe_info    Payment?        @relation("UserToPayment")
+  spotify_info   Spotify?        @relation("UserToSpotify")
+
+  @@map("users")
+}
+
+model Payment {
+  id                         Int      @id @default(autoincrement())
+  stripe_customer_id         String?
+  stripe_subscription_status String?
+  stripe_invoice_url         String?
+  stripe_subscription_amount Float?
+  stripe_subscription_id     String?
+  stripe_period_start        Int?
+  stripe_period_end          Int?
+  stripe_plan_description    String?
+  stripe_plan_id             String?
+  cancel_at_period_end       Boolean  @default(false)
+  createdAt                  DateTime @default(now()) @map("created_at")
+  updatedAt                  DateTime @updatedAt @map("updated_at")
+  user                       User?    @relation("UserToPayment", fields: [userId], references: [id])
+  userId                     Int?     @unique
+
+  @@map("payments")
+}
+
+model Spotify {
+  id     Int     @id @default(autoincrement())
+  email  String  @unique
+  name   String
+  avatar String?
+  token  String
+  user   User?   @relation("UserToSpotify", fields: [userId], references: [id])
+  userId Int?    @unique
+
+  @@map("spotify")
+}
+
+model LoginActivity {
+  id       Int    @id @default(autoincrement())
+  activity String
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int
+}
