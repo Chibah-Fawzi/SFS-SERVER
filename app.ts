@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import { db } from "./config/db";
 const router = require("express").Router();
 
+const userRoute = require("./app/user/route");
 const authRoute = require("./app/auth/route");
 const spotifyRoute = require("./app/spotify/route");
 
@@ -27,6 +28,7 @@ app
   })
   .use("/", router);
 
+userRoute.init(router);
 authRoute.init(router);
 spotifyRoute.init(router);
 
